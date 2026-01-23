@@ -8,16 +8,19 @@ public class Player : MonoBehaviour
         Vector2 inputVector = new(0, 0);
         if (Input.GetKey(KeyCode.W)) {
             inputVector.y += 1;
-        } else if (Input.GetKey(KeyCode.S)) {
+        }
+        if (Input.GetKey(KeyCode.S)) {
             inputVector.y -= 1;
-        } else if (Input.GetKey(KeyCode.A)) {
+        }
+        if (Input.GetKey(KeyCode.A)) {
             inputVector.x -= 1;
-        } else if (Input.GetKey(KeyCode.D)) {
+        }
+        if (Input.GetKey(KeyCode.D)) {
             inputVector.x += 1;
         }
         inputVector.Normalize();
 
         Vector3 moveDir = new(inputVector.x, 0, inputVector.y);
-        this.transform.position += moveDir * Time.deltaTime;
+        this.transform.position += moveDir * Time.deltaTime * moveSpeed;
     }
 }
