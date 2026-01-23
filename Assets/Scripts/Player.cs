@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
     private const float INTERACT_DISTANCE = 2f;
     private bool isWalking = false;
 
+    private void Start() {
+        gameInput.OnInteractAcion += PerformInteract;
+    }
+
     private void Update() {
         HandleMovement();
         HandleInteract();
@@ -62,6 +66,14 @@ public class Player : MonoBehaviour
     }
 
     private void HandleInteract() {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
+            if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
+                //
+            }
+        }
+    }
+
+    private void PerformInteract() {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
             if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
                 clearCounter.Interact();
