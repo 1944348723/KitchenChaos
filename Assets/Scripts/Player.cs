@@ -6,12 +6,23 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotateSpeed = 10f;
+    [SerializeField] private LayerMask countersLayerMask;
 
     private const float PLAYER_RADIUS = 0.7f;
     private const float PLAYER_HEIGHT = 1;
+    private const float INTERACT_DISTANCE = 2f;
     private bool isWalking = false;
 
     private void Update() {
+        HandleMovement();
+        HandleInteract();
+    }
+
+    public bool IsWalking() {
+        return this.isWalking;
+    }
+
+    private void HandleMovement() {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new(inputVector.x, 0, inputVector.y);
@@ -50,7 +61,11 @@ public class Player : MonoBehaviour
         } 
     }
 
-    public bool IsWalking() {
-        return this.isWalking;
+    private void HandleInteract() {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
+            if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
+                clearCounter.Interact();
+            }
+        }
     }
 }
