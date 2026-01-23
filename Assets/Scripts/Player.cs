@@ -8,10 +8,23 @@ public class Player : MonoBehaviour
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private LayerMask countersLayerMask;
 
+    public static Player Instance { get; private set; }
+    public event System.Action<ClearCounter> OnSelectedCounterChanged;
+
     private const float PLAYER_RADIUS = 0.7f;
     private const float PLAYER_HEIGHT = 1;
     private const float INTERACT_DISTANCE = 2f;
     private bool isWalking = false;
+    private ClearCounter selectedCounter;
+
+    private void Awake() {
+        if (Instance != null && Instance != this) {
+            Debug.LogWarning("Player Instance Recreated");
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start() {
         gameInput.OnInteractAcion += PerformInteract;
@@ -19,7 +32,7 @@ public class Player : MonoBehaviour
 
     private void Update() {
         HandleMovement();
-        HandleInteract();
+        UpdateInteractableObject();
     }
 
     public bool IsWalking() {
@@ -65,19 +78,26 @@ public class Player : MonoBehaviour
         } 
     }
 
-    private void HandleInteract() {
+    private void UpdateInteractableObject() {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
             if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
-                //
+                SetSelectedCounter(clearCounter);
+            } else {
+                SetSelectedCounter(null);
             }
+        } else {
+            SetSelectedCounter(null);
         }
     }
 
     private void PerformInteract() {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
-            if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
-                clearCounter.Interact();
-            }
+        selectedCounter?.Interact();
+    }
+
+    private void SetSelectedCounter(ClearCounter clearCounter) {
+        if (selectedCounter != clearCounter) {
+            selectedCounter = clearCounter;
+            OnSelectedCounterChanged?.Invoke(selectedCounter);
         }
     }
 }
