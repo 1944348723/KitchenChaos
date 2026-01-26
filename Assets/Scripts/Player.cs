@@ -10,13 +10,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
     public static Player Instance { get; private set; }
-    public event System.Action<ClearCounter> OnSelectedCounterChanged;
+    public event System.Action<IInteractable> OnSelectedObjectChanged;
 
     private const float PLAYER_RADIUS = 0.7f;
     private const float PLAYER_HEIGHT = 1;
     private const float INTERACT_DISTANCE = 2f;
     private bool isWalking = false;
-    private ClearCounter selectedCounter;
+    private IInteractable selectedObject;
     private KitchenObject kitchenObject;
 
     private void Awake() {
@@ -55,6 +55,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void ClearKitchenObject() {
         this.kitchenObject = null;
         this.kitchenObjectHoldPoint.DetachChildren();
+    }
+
+    public bool HasKitchenObject() {
+        return this.kitchenObject != null;
+    }
+
+    public KitchenObject GetKitchenObject() {
+        return this.kitchenObject;
     }
 
     private void HandleMovement() {
@@ -98,24 +106,24 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void UpdateInteractableObject() {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit raycastHit, INTERACT_DISTANCE, countersLayerMask)) {
-            if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter)) {
-                SetSelectedCounter(clearCounter);
+            if (raycastHit.transform.TryGetComponent<IInteractable>(out IInteractable interactable)) {
+                SetSelectedObject(interactable);
             } else {
-                SetSelectedCounter(null);
+                SetSelectedObject(null);
             }
         } else {
-            SetSelectedCounter(null);
+            SetSelectedObject(null);
         }
     }
 
     private void PerformInteract() {
-        selectedCounter?.Interact(this);
+        selectedObject?.Interact(this);
     }
 
-    private void SetSelectedCounter(ClearCounter clearCounter) {
-        if (selectedCounter != clearCounter) {
-            selectedCounter = clearCounter;
-            OnSelectedCounterChanged?.Invoke(selectedCounter);
+    private void SetSelectedObject(IInteractable obj) {
+        if (selectedObject != obj) {
+            selectedObject = obj;
+            OnSelectedObjectChanged?.Invoke(selectedObject);
         }
     }
 }

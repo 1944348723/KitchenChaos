@@ -5,11 +5,11 @@ public class ClearCounterVisual : MonoBehaviour {
     [SerializeField] GameObject selectedVisual;
 
     private void Start() {
-        Player.Instance.OnSelectedCounterChanged += HandleSelectedCounterChanged;
+        Player.Instance.OnSelectedObjectChanged += HandleSelectedObjectChanged;
     }
 
-    private void HandleSelectedCounterChanged(ClearCounter newSelectedCounter) {
-        if (newSelectedCounter == this.clearCounter) {
+    private void HandleSelectedObjectChanged(IInteractable newSelectedObject) {
+        if (newSelectedObject == (this.clearCounter as IInteractable)) {
             EnableHighlight();
         } else {
             DisableHighlight();
