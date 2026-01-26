@@ -4,17 +4,22 @@ public class KitchenObject : MonoBehaviour
 {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
-    private ClearCounter clearCounter;
+    private IKitchenObjectParent parent;
 
     public KitchenObjectSO GetKitchenObjectSO() {
         return this.kitchenObjectSO;
     }
 
-    public void SetCounter(ClearCounter clearCounter) {
-        this.clearCounter = clearCounter;
+    public void SetParent(IKitchenObjectParent parent) {
+        if (this.parent != null) {
+            this.parent.ClearKitchenObject();
+        }
+
+        this.parent = parent;
+        parent.SetKitchenObject(this);
     }
 
-    public ClearCounter GetCounter() {
-        return this.clearCounter;
+    public IKitchenObjectParent GetParent() {
+        return this.parent;
     }
 }
