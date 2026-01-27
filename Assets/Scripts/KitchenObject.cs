@@ -24,7 +24,9 @@ public class KitchenObject : MonoBehaviour
     }
 
     public void DestroySelf() {
-        transform.SetParent(null);
+        if (parent != null) {
+            parent.ClearKitchenObject();
+        }
         parent = null;
         Destroy(gameObject);
     }

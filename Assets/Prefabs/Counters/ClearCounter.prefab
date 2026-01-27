@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 8407599934515326689}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -100,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f9f544d83a627c47acec514c8e9d0ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kitchenObjectPrefab: {fileID: 0}
   counterTopPoint: {fileID: 60310513388566921}
 --- !u!1001 &1272883503636789564
 PrefabInstance:
@@ -119,6 +118,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Selected
+      objectReference: {fileID: 0}
+    - target: {fileID: 4589716710238282922, guid: 0004cb1e11ad014419b943c7da960724,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4589716710238282923, guid: 0004cb1e11ad014419b943c7da960724,
         type: 3}
@@ -193,7 +197,7 @@ PrefabInstance:
     - target: {fileID: 8489276541531669327, guid: 0004cb1e11ad014419b943c7da960724,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -282,7 +286,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4589716710238282922, guid: 0004cb1e11ad014419b943c7da960724,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 699141452300727892}
+      addedObject: {fileID: 3598907200145778549}
   m_SourcePrefab: {fileID: 100100000, guid: 0004cb1e11ad014419b943c7da960724, type: 3}
 --- !u!1 &7249916712872142404 stripped
 GameObject:
@@ -290,7 +294,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6569929221458887406}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &699141452300727892
+--- !u!114 &3598907200145778549
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -299,10 +303,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7249916712872142404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbc2060c91b664240a501523f96fc95d, type: 3}
+  m_Script: {fileID: 11500000, guid: 90d53c71ec4320e4c855137cd56f9144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearCounter: {fileID: 8650500275985302502}
+  counter: {fileID: 8650500275985302502}
   selectedVisual: {fileID: 3322464425282428310}
 --- !u!4 &7249916712872142405 stripped
 Transform:

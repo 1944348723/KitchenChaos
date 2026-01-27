@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class ClearCounterVisual : MonoBehaviour {
-    [SerializeField] ClearCounter clearCounter;
-    [SerializeField] GameObject selectedVisual;
+public class CounterVisual : MonoBehaviour
+{
+    [SerializeField] protected MonoBehaviour counter;
+    [SerializeField] private GameObject selectedVisual;
 
-    private void Start() {
+    protected void Start() {
         Player.Instance.OnSelectedObjectChanged += HandleSelectedObjectChanged;
     }
 
     private void HandleSelectedObjectChanged(IInteractable newSelectedObject) {
-        if (newSelectedObject == (this.clearCounter as IInteractable)) {
+        if (newSelectedObject == (counter as IInteractable)) {
             EnableHighlight();
         } else {
             DisableHighlight();
