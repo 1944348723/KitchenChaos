@@ -22,4 +22,10 @@ public class KitchenObject : MonoBehaviour
     public IKitchenObjectParent GetParent() {
         return this.parent;
     }
+
+    public void DestroySelf() {
+        transform.SetParent(null);
+        parent = null;
+        Destroy(gameObject);
+    }
 }

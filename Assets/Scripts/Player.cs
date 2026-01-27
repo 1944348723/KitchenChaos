@@ -30,6 +30,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Start() {
         gameInput.OnInteractAcion += PerformInteract;
+        gameInput.OnInteractAlternateAction += PerformInteractAlternate;
     }
 
     private void Update() {
@@ -118,6 +119,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void PerformInteract() {
         selectedObject?.Interact(this);
+    }
+    
+    private void PerformInteractAlternate() {
+        selectedObject?.InteractAlternate(this);
     }
 
     private void SetSelectedObject(IInteractable obj) {
