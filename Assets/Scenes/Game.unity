@@ -981,9 +981,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
         type: 3}
+      propertyPath: slices
+      value: 
+      objectReference: {fileID: 11400000, guid: 5feafd402222d4a43bc2abb1b7cfaff3,
+        type: 2}
+    - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
+        type: 3}
       propertyPath: counterTopPoint
       value: 
       objectReference: {fileID: 992780309}
+    - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
+        type: 3}
+      propertyPath: cuttingRecipes.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
+        type: 3}
+      propertyPath: cuttingRecipes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: f820b8d0ab0620042881254997605709,
+        type: 2}
+    - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
+        type: 3}
+      propertyPath: cuttingRecipes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 379e71b5be151ff49b7ed6f8c63c4121,
+        type: 2}
+    - target: {fileID: 4807807239985867922, guid: d847b698bd51cdd4391d945bd1574fe3,
+        type: 3}
+      propertyPath: cuttingRecipes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0fd929ac1387c664e84fa0b73a5c7f32,
+        type: 2}
     - target: {fileID: 5499190645218633360, guid: d847b698bd51cdd4391d945bd1574fe3,
         type: 3}
       propertyPath: CuttingCounter

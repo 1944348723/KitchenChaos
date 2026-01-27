@@ -1,13 +1,14 @@
+using System.Linq;
 using UnityEngine;
 
 public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
 {
     [SerializeField] private Transform counterTopPoint;
-    [SerializeField] private KitchenObjectSO slices;
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
     private KitchenObject kitchenObject;
 
     public void Interact(Player player) {
-        if (!kitchenObject && player.HasKitchenObject()) {
+        if (!kitchenObject && player.HasKitchenObject() && HasOutputFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
         } else if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
@@ -15,14 +16,25 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     }
 
     public void InteractAlternate(Player player) {
-        if (kitchenObject) {
+        if (kitchenObject && HasOutputFor(kitchenObject.GetKitchenObjectSO())) {
+            KitchenObjectSO outputSO = GetOutputFor(kitchenObject.GetKitchenObjectSO());
+
             kitchenObject.DestroySelf();
             kitchenObject = null;
+
+            Transform outputTransform = Instantiate(outputSO.prefab);
+            outputTransform.GetComponent<KitchenObject>().SetParent(this);
         }
-        var kitchenObjectTransform = Instantiate(slices.Prefab);
-        SetKitchenObject(kitchenObjectTransform.GetComponent<KitchenObject>());
     }
-    
+
+    public KitchenObjectSO GetOutputFor(KitchenObjectSO input) {
+        return cuttingRecipes.FirstOrDefault(cuttingRecipe => cuttingRecipe.input == input)?.output;
+    }
+
+    public bool HasOutputFor(KitchenObjectSO input) {
+        return cuttingRecipes.FirstOrDefault(cuttingRecipe => cuttingRecipe.input == input) != null;
+    }
+
     public void SetKitchenObject(KitchenObject kitchenObject) {
         if (this.kitchenObject) {
             Debug.Log("CuttingCounter already has a kitchenobject");
