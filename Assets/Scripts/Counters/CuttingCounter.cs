@@ -5,6 +5,10 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
 {
     [SerializeField] private Transform counterTopPoint;
     [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
+
+    public event System.Action<float> OnProgressChanged;
+    public event System.Action OnCut;
+
     private KitchenObject kitchenObject;
     private int cutTimes = 0;
 
@@ -12,6 +16,9 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
         if (!kitchenObject && player.HasKitchenObject() && HasOutputFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
             cutTimes = 0;
+
+            int cutTimesNeeded = GetRecipeFor(kitchenObject.GetKitchenObjectSO()).cutTimesNeeded;
+            OnProgressChanged?.Invoke((float)cutTimes / cutTimesNeeded);
         } else if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
         }
@@ -22,6 +29,9 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
             KitchenObjectSO outputSO = GetOutputFor(kitchenObject.GetKitchenObjectSO());
             ++cutTimes;
             int cutTimesNeeded = GetRecipeFor(kitchenObject.GetKitchenObjectSO()).cutTimesNeeded;
+            OnProgressChanged?.Invoke((float)cutTimes / cutTimesNeeded);
+            OnCut?.Invoke();
+
             if (cutTimes >= cutTimesNeeded) {
                 kitchenObject.DestroySelf();
                 kitchenObject = null;
