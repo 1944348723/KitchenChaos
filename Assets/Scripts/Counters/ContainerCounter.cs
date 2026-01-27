@@ -6,8 +6,7 @@ public class ContainerCounter : MonoBehaviour, IInteractable {
 
     public void Interact(Player player) {
         if (!player.HasKitchenObject()) {
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
-            kitchenObjectTransform.GetComponent<KitchenObject>().SetParent(player);
+            KitchenObject.Spawn(kitchenObjectSO, player);
             OnKitchenObjectSpawned?.Invoke();
         } 
     }

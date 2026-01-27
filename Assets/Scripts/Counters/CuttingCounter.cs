@@ -34,10 +34,7 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
 
             if (cutTimes >= cutTimesNeeded) {
                 kitchenObject.DestroySelf();
-                kitchenObject = null;
-
-                Transform outputTransform = Instantiate(outputSO.prefab);
-                outputTransform.GetComponent<KitchenObject>().SetParent(this);
+                KitchenObject.Spawn(outputSO, this);
             }
         }
     }
