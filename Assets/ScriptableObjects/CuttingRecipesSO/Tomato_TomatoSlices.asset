@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 11400000, guid: cc4fef972564a5642954cf3d37abeb7c, type: 2}
   output: {fileID: 11400000, guid: 5feafd402222d4a43bc2abb1b7cfaff3, type: 2}
+  cutTimesNeeded: 3

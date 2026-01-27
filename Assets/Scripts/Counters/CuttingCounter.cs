@@ -6,10 +6,12 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     [SerializeField] private Transform counterTopPoint;
     [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
     private KitchenObject kitchenObject;
+    private int cutTimes = 0;
 
     public void Interact(Player player) {
         if (!kitchenObject && player.HasKitchenObject() && HasOutputFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
+            cutTimes = 0;
         } else if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
         }
@@ -18,12 +20,15 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     public void InteractAlternate(Player player) {
         if (kitchenObject && HasOutputFor(kitchenObject.GetKitchenObjectSO())) {
             KitchenObjectSO outputSO = GetOutputFor(kitchenObject.GetKitchenObjectSO());
+            ++cutTimes;
+            int cutTimesNeeded = GetRecipeFor(kitchenObject.GetKitchenObjectSO()).cutTimesNeeded;
+            if (cutTimes >= cutTimesNeeded) {
+                kitchenObject.DestroySelf();
+                kitchenObject = null;
 
-            kitchenObject.DestroySelf();
-            kitchenObject = null;
-
-            Transform outputTransform = Instantiate(outputSO.prefab);
-            outputTransform.GetComponent<KitchenObject>().SetParent(this);
+                Transform outputTransform = Instantiate(outputSO.prefab);
+                outputTransform.GetComponent<KitchenObject>().SetParent(this);
+            }
         }
     }
 
@@ -32,7 +37,11 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     }
 
     public bool HasOutputFor(KitchenObjectSO input) {
-        return cuttingRecipes.FirstOrDefault(cuttingRecipe => cuttingRecipe.input == input) != null;
+        return GetOutputFor(input) != null;
+    }
+
+    public CuttingRecipeSO GetRecipeFor(KitchenObjectSO input) {
+        return cuttingRecipes.FirstOrDefault(cuttingRecipe => cuttingRecipe.input == input);
     }
 
     public void SetKitchenObject(KitchenObject kitchenObject) {
