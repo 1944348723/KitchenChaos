@@ -1,8 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
-{
+public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable, IHasProgress {
     [SerializeField] private Transform counterTopPoint;
     [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
 

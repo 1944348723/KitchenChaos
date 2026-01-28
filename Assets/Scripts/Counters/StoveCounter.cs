@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent {
+public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasProgress {
     private enum StoveState {
         Idle,
         Frying,
@@ -12,6 +12,8 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent {
     [SerializeField] private Transform counterTopPoint;
     [SerializeField] private FryingRecipeSO[] fryingRecipes;
     [SerializeField] private BurningRecipeSO[] burningRecipes;
+
+    public event System.Action<float> OnProgressChanged;
 
     private KitchenObject kitchenObject;
     private StoveState currentState = StoveState.Idle;
@@ -38,6 +40,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent {
     public void Interact(Player player) {
         if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
+            OnProgressChanged?.Invoke(0f);
             currentState = StoveState.Idle;
         } else if (!kitchenObject && player.HasKitchenObject() && HasFryingRecipeFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
@@ -96,6 +99,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent {
             currentState = StoveState.Burning;
             burningTimer = 0f;
         }
+        OnProgressChanged?.Invoke(fryingTimer / currentFryingRecipeSO.timeNeeded);
     }
 
     private void HandleBurning() {
@@ -107,5 +111,6 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent {
 
             currentState = StoveState.Burned;
         }
+        OnProgressChanged?.Invoke(burningTimer / currentBurningRecipeSO.timeNeeded);
     }
 }

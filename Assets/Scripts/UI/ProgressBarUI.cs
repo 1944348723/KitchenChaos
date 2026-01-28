@@ -2,12 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour {
-    [SerializeField] private CuttingCounter cuttingCounter;
+    [SerializeField] private MonoBehaviour progressSource;
     [SerializeField] private Image barImage;
 
     private void Start() {
         barImage.fillAmount = 0f;
-        cuttingCounter.OnProgressChanged += HandleProgressChanged;
+
+        if (progressSource is not IHasProgress) {
+            Debug.LogError("progressSource does not implement IHasProgress");
+        }
+        (progressSource as IHasProgress).OnProgressChanged += HandleProgressChanged;
+
         Hide();
     }
 
