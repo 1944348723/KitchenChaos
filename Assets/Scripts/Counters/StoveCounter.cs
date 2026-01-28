@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 
 public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasProgress {
-    private enum StoveState {
+    public enum StoveState {
         Idle,
         Frying,
         Burning,
@@ -14,6 +14,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
     [SerializeField] private BurningRecipeSO[] burningRecipes;
 
     public event System.Action<float> OnProgressChanged;
+    public event System.Action<StoveState> OnStateChanged;
 
     private KitchenObject kitchenObject;
     private StoveState currentState = StoveState.Idle;
@@ -41,7 +42,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
         if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
             OnProgressChanged?.Invoke(0f);
-            currentState = StoveState.Idle;
+            ChangeState(StoveState.Idle);
         } else if (!kitchenObject && player.HasKitchenObject() && HasFryingRecipeFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
 
@@ -49,7 +50,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             currentBurningRecipeSO = GetBurningRecipeFor(currentFryingRecipeSO.output);
             fryingTimer = 0f;
             burningTimer = 0f;
-            currentState = StoveState.Frying;
+            ChangeState(StoveState.Frying);
         }
     }
     
@@ -96,7 +97,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             kitchenObject.DestroySelf();
             KitchenObject.Spawn(currentFryingRecipeSO.output, this);
 
-            currentState = StoveState.Burning;
+            ChangeState(StoveState.Burning);
             burningTimer = 0f;
         }
         OnProgressChanged?.Invoke(fryingTimer / currentFryingRecipeSO.timeNeeded);
@@ -109,8 +110,13 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             kitchenObject.DestroySelf();
             KitchenObject.Spawn(currentBurningRecipeSO.output, this);
 
-            currentState = StoveState.Burned;
+            ChangeState(StoveState.Burned);
         }
         OnProgressChanged?.Invoke(burningTimer / currentBurningRecipeSO.timeNeeded);
+    }
+
+    private void ChangeState(StoveState state) {
+        currentState = state;
+        OnStateChanged?.Invoke(currentState);
     }
 }
