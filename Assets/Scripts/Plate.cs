@@ -19,4 +19,8 @@ public class Plate : KitchenObject {
             return false;
         }
     }
+
+    public List<KitchenObjectSO> GetIngredients() {
+        return ingredients;
+    }
 }
