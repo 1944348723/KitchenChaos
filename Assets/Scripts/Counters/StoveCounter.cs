@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasProgress {
@@ -41,16 +42,22 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
     public void Interact(Player player) {
         if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
-            OnProgressChanged?.Invoke(0f);
             ChangeState(StoveState.Idle);
         } else if (!kitchenObject && player.HasKitchenObject() && HasFryingRecipeFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
 
             currentFryingRecipeSO = GetFryingRecipeFor(kitchenObject.GetKitchenObjectSO());
             currentBurningRecipeSO = GetBurningRecipeFor(currentFryingRecipeSO.output);
-            fryingTimer = 0f;
-            burningTimer = 0f;
             ChangeState(StoveState.Frying);
+        } else if (kitchenObject && player.HasKitchenObject()) {
+            // 玩家手里的是盘子
+            if (player.GetKitchenObject() is Plate) {
+                Plate plate = player.GetKitchenObject() as Plate;
+                if (plate.TryAddIngredient(kitchenObject)) {
+                    kitchenObject.DestroySelf();
+                    ChangeState(StoveState.Idle);
+                }
+            }
         }
     }
     
@@ -98,7 +105,6 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             KitchenObject.Spawn(currentFryingRecipeSO.output, this);
 
             ChangeState(StoveState.Burning);
-            burningTimer = 0f;
         }
         OnProgressChanged?.Invoke(fryingTimer / currentFryingRecipeSO.timeNeeded);
     }
@@ -118,5 +124,19 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
     private void ChangeState(StoveState state) {
         currentState = state;
         OnStateChanged?.Invoke(currentState);
+        switch (state) {
+            case StoveState.Idle:
+                OnProgressChanged?.Invoke(0f);
+                break;
+            case StoveState.Frying:
+                fryingTimer = 0f;
+                break;
+            case StoveState.Burning:
+                burningTimer = 0f;
+                break;
+            case StoveState.Burned:
+                OnProgressChanged?.Invoke(0f);
+                break;
+        }
     }
 }

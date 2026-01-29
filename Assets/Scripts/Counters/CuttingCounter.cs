@@ -20,6 +20,14 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
             OnProgressChanged?.Invoke((float)cutTimes / cutTimesNeeded);
         } else if (kitchenObject && !player.HasKitchenObject()) {
             kitchenObject.SetParent(player);
+        } else if (kitchenObject && player.HasKitchenObject()) {
+            // 玩家手里的是盘子
+            if (player.GetKitchenObject() is Plate) {
+                Plate plate = player.GetKitchenObject() as Plate;
+                if (plate.TryAddIngredient(kitchenObject)) {
+                    kitchenObject.DestroySelf();
+                }
+            }
         }
     }
 
