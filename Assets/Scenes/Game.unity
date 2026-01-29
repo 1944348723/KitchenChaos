@@ -2267,6 +2267,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 838a9e9ec7dafbe45824cd5f692c40d1, type: 3}
+--- !u!1 &1315819363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1315819365}
+  - component: {fileID: 1315819364}
+  m_Layer: 0
+  m_Name: DeliveryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1315819364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315819363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc42ae5526f69074a8a292e332dc28d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allRecipes:
+  - {fileID: 11400000, guid: 1ed3899bb1d03cd4e8812a93267c4eae, type: 2}
+  - {fileID: 11400000, guid: 4f52b61a5759e624381433e3650f1df8, type: 2}
+  - {fileID: 11400000, guid: 91b5379e2e4cf264ab1f12b3edff993b, type: 2}
+  - {fileID: 11400000, guid: b48bdd5b63198f443b789a3b366d4d64, type: 2}
+--- !u!4 &1315819365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315819363}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1382761542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 777545982861349434, guid: edd59477f591d0b4695fd038471c660e,
@@ -3441,5 +3490,6 @@ SceneRoots:
   - {fileID: 200762840}
   - {fileID: 1976028877}
   - {fileID: 2022623671}
+  - {fileID: 1315819365}
   - {fileID: 1067404203}
   - {fileID: 68140241}
