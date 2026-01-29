@@ -6,6 +6,9 @@ public class DeliveryManager : MonoBehaviour {
     [SerializeField] private List<RecipeSO> allRecipes;
 
     public static DeliveryManager Instance { get; private set; }
+    public event System.Action OnRecipeSpawned;
+    public event System.Action OnRecipeCompleted;
+
     private const int MAX_WAITING_RECIPES_COUNT = 4;
     private const float RECIPE_SPAWN_INTERVAL = 4f;
 
@@ -40,7 +43,7 @@ public class DeliveryManager : MonoBehaviour {
             spawnTimer -= RECIPE_SPAWN_INTERVAL;
             RecipeSO recipe = allRecipes[Random.Range(0, allRecipes.Count - 1)];
             waitingRecipes.Add(recipe);
-            Debug.Log(recipe.recipeName);
+            OnRecipeSpawned?.Invoke();
 
             if (waitingRecipes.Count == MAX_WAITING_RECIPES_COUNT) {
                 spawnTimer = 0;
@@ -49,7 +52,6 @@ public class DeliveryManager : MonoBehaviour {
     }
 
     public void Deliver(List<KitchenObjectSO> deliveredIngredients) {
-        bool foundMatch = false;
         for (int i = 0; i < waitingRecipes.Count; ++i) {
             var waitingRecipe = waitingRecipes[i];
             HashSet<KitchenObjectSO> ingredientsSet =  ingredientsSetForRecipes[waitingRecipe.recipeName];
@@ -66,15 +68,14 @@ public class DeliveryManager : MonoBehaviour {
             }
 
             if (match) {
-                Debug.Log("Delivered a right recipe: " + waitingRecipe.recipeName);
-                foundMatch = true;
                 waitingRecipes.RemoveAt(i);
+                OnRecipeCompleted?.Invoke();
                 break;
             }
         }
+    }
 
-        if (!foundMatch) {
-            Debug.Log("Delivered a wrong recipe: ");
-        }
+    public List<RecipeSO> GetWaitingRecipes() {
+        return waitingRecipes;
     }
 }
