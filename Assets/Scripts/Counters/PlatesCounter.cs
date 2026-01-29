@@ -29,6 +29,7 @@ public class PlatesCounter : MonoBehaviour, IInteractable {
     }
 
     public void Interact(Player player) {
+        if (player.HasKitchenObject()) return;
         --currentPlatesCount;
         OnPlateRemoved?.Invoke();
         KitchenObject.Spawn(plateSO, player);
