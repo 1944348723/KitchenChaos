@@ -14,6 +14,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
     [SerializeField] private FryingRecipeSO[] fryingRecipes;
     [SerializeField] private BurningRecipeSO[] burningRecipes;
 
+    public static event System.Action<Vector3> OnObjectPlacedOn;
     public event System.Action<float> OnProgressChanged;
     public event System.Action<StoveState> OnStateChanged;
 
@@ -45,6 +46,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             ChangeState(StoveState.Idle);
         } else if (!kitchenObject && player.HasKitchenObject() && HasFryingRecipeFor(player.GetKitchenObject().GetKitchenObjectSO())) {
             player.GetKitchenObject().SetParent(this);
+            OnObjectPlacedOn?.Invoke(transform.position);
 
             currentFryingRecipeSO = GetFryingRecipeFor(kitchenObject.GetKitchenObjectSO());
             currentBurningRecipeSO = GetBurningRecipeFor(currentFryingRecipeSO.output);
@@ -66,6 +68,7 @@ public class StoveCounter : MonoBehaviour, IInteractable, IKitchenObjectParent, 
             Debug.Log("StoveCounter already has a kitchenobject");
             return;
         }
+        if (!kitchenObject) return;
 
         kitchenObject.transform.parent = counterTopPoint.transform;
         kitchenObject.transform.localPosition = Vector3.zero;

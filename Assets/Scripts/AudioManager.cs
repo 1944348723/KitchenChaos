@@ -6,9 +6,18 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
     [SerializeField] private int audioSourcePoolSize = 4;
+
+    public static AudioManager Instance { get; private set; }
     private AudioSource[] audioSources;
 
     private void Awake() {
+        if (Instance != null && Instance != this) {
+            Debug.LogWarning("AudioManager instance recreated");
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+
         audioSources = new AudioSource[audioSourcePoolSize];
         for (int i = 0; i < audioSources.Length; ++i) {
             GameObject newGameObject = new("AudioSource");
@@ -22,6 +31,10 @@ public class AudioManager : MonoBehaviour
         DeliveryCounter.OnDeliverySuccess += HandleDeliverySuccess;
         CuttingCounter.OnAnyCut += HandleAnyCut;
         Player.Instance.OnPickupSomething += HandlePlayerPickupSomething;
+        ClearCounter.OnObjectPlacedOn += HandleObjectPlacedOnClearCounter;
+        CuttingCounter.OnObjectPlacedOn += HandleObjectPlacedOnCuttingCounter;
+        StoveCounter.OnObjectPlacedOn += HandleObjectPlacedOnStoveCounter;
+        TrashCounter.OnTrash += HandleTrash;
     }
 
     public void Play(AudioClip audioClip, Vector3 position, float volume = 1) {
@@ -63,5 +76,25 @@ public class AudioManager : MonoBehaviour
 
     private void HandlePlayerPickupSomething(Vector3 position) {
         Play(audioClipRefsSO.objectPickup, position);
+    }
+
+    private void HandleObjectPlacedOnClearCounter(Vector3 position) {
+        Play(audioClipRefsSO.objectDrop, position);
+    }
+
+    private void HandleObjectPlacedOnCuttingCounter(Vector3 position) {
+        Play(audioClipRefsSO.objectDrop, position);
+    }
+
+    private void HandleObjectPlacedOnStoveCounter(Vector3 position) {
+        Play(audioClipRefsSO.objectDrop, position);
+    }
+
+    private void HandleTrash(Vector3 position) {
+        Play(audioClipRefsSO.trash, position);
+    }
+
+    public void PlayFootstep(Vector3 position, float volume) {
+        Play(audioClipRefsSO.footstep, position, volume);
     }
 }

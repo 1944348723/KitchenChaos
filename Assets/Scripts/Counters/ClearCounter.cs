@@ -3,6 +3,7 @@ using UnityEngine;
 public class ClearCounter : MonoBehaviour, IKitchenObjectParent, IInteractable {
     [SerializeField] private Transform counterTopPoint;
 
+    public static event System.Action<Vector3> OnObjectPlacedOn;
     private KitchenObject kitchenObject;
 
     public void Interact(Player player) {
@@ -32,10 +33,12 @@ public class ClearCounter : MonoBehaviour, IKitchenObjectParent, IInteractable {
             Debug.Log("ClearCounter already has a kitchenobject");
             return;
         }
+        if (!kitchenObject) return;
 
         kitchenObject.transform.parent = counterTopPoint.transform;
         kitchenObject.transform.localPosition = Vector3.zero;
         this.kitchenObject = kitchenObject;
+        OnObjectPlacedOn?.Invoke(transform.position);
     }
 
     public void ClearKitchenObject() {

@@ -48,6 +48,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             Debug.Log("Player already has a kitchenobject");
             return;
         }
+        if (!kitchenObject) return;
 
         kitchenObject.transform.parent = kitchenObjectHoldPoint.transform;
         kitchenObject.transform.localPosition = Vector3.zero;

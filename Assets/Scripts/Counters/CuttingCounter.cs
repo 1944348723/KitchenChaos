@@ -6,6 +6,7 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
 
     public static event System.Action<Vector3> OnAnyCut;
+    public static event System.Action<Vector3> OnObjectPlacedOn;
     public event System.Action<float> OnProgressChanged;
     public event System.Action OnCut;
 
@@ -65,10 +66,12 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
             Debug.Log("CuttingCounter already has a kitchenobject");
             return;
         }
+        if (!kitchenObject) return;
 
         kitchenObject.transform.parent = counterTopPoint.transform;
         kitchenObject.transform.localPosition = Vector3.zero;
         this.kitchenObject = kitchenObject;
+        OnObjectPlacedOn?.Invoke(transform.position);
     }
 
     public void ClearKitchenObject() {
