@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
     public static Player Instance { get; private set; }
+    public event System.Action<Vector3> OnPickupSomething;
     public event System.Action<IInteractable> OnSelectedObjectChanged;
 
     private const float PLAYER_RADIUS = 0.7f;
@@ -51,6 +52,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         kitchenObject.transform.parent = kitchenObjectHoldPoint.transform;
         kitchenObject.transform.localPosition = Vector3.zero;
         this.kitchenObject = kitchenObject;
+        OnPickupSomething?.Invoke(transform.position);
     }
 
     public void ClearKitchenObject() {

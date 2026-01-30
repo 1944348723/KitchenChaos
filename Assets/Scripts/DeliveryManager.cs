@@ -51,7 +51,8 @@ public class DeliveryManager : MonoBehaviour {
         }
     }
 
-    public void Deliver(List<KitchenObjectSO> deliveredIngredients) {
+    public bool Deliver(List<KitchenObjectSO> deliveredIngredients) {
+        bool success = false;
         for (int i = 0; i < waitingRecipes.Count; ++i) {
             var waitingRecipe = waitingRecipes[i];
             HashSet<KitchenObjectSO> ingredientsSet =  ingredientsSetForRecipes[waitingRecipe.recipeName];
@@ -70,9 +71,11 @@ public class DeliveryManager : MonoBehaviour {
             if (match) {
                 waitingRecipes.RemoveAt(i);
                 OnRecipeCompleted?.Invoke();
+                success = true;
                 break;
             }
         }
+        return success;
     }
 
     public List<RecipeSO> GetWaitingRecipes() {

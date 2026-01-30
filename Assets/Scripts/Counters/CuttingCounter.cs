@@ -5,6 +5,7 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
     [SerializeField] private Transform counterTopPoint;
     [SerializeField] private CuttingRecipeSO[] cuttingRecipes;
 
+    public static event System.Action<Vector3> OnAnyCut;
     public event System.Action<float> OnProgressChanged;
     public event System.Action OnCut;
 
@@ -38,6 +39,7 @@ public class CuttingCounter : MonoBehaviour, IKitchenObjectParent, IInteractable
             int cutTimesNeeded = GetRecipeFor(kitchenObject.GetKitchenObjectSO()).cutTimesNeeded;
             OnProgressChanged?.Invoke((float)cutTimes / cutTimesNeeded);
             OnCut?.Invoke();
+            OnAnyCut?.Invoke(transform.position);
 
             if (cutTimes >= cutTimesNeeded) {
                 kitchenObject.DestroySelf();
